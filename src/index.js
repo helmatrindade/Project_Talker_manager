@@ -1,6 +1,8 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const generateToken = require('./utils/generateToken');
+// const crypto = require('crypto');
 
 const app = express();
 app.use(express.json());
@@ -47,6 +49,14 @@ app.get('/talker/:id', async (req, res) => {
     return res.status(200).json(talker);
   } catch (error) {
     console.error(error);
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  if ({email, password}) {
+    const token = generateToken();
+    return res.status(200).json({ token });
   }
 });
 
