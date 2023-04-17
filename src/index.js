@@ -115,6 +115,16 @@ app.put('/talker/:id',
     return res.status(200).json({ ...newPeople, id: Number(id) });
   });
 
+  // Requisito 07
+  app.delete('/talker/:id', validatorToken, async (req, res) => {
+    const { id } = req.params;
+    const talkers = await readTalker();
+    // Tudo que for diferente do id retornado pelo req.params será mantido e reescrito na linha 124.
+    const deleteTalker = talkers.filter((talker) => talker.id !== Number(id));
+    await fs.writeFile(talkerPath, JSON.stringify(deleteTalker));
+    return res.status(204).json();
+  });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
