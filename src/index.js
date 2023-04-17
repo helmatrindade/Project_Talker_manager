@@ -92,6 +92,29 @@ app.post('/talker',
     return res.status(201).json(newTalker);
   });
 
+app.put('/talker/:id',
+  validatorToken,
+  validatorName,
+  validatorAge,
+  validatorTalk,
+  validatorWatchedAt,
+  validatorRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const talkers = await readTalker();
+    const newPeople = req.body;
+    // talkerId está me retornando a posição do array
+    const talkerId = talkers.findIndex((t) => t.id === Number(id));
+    // Pega todo o array na posição talkerId, adiciona os dados que escreveu com newPeople e cria uma chave chamada id e adiciona como valor o retorno do const { id } = req.params.
+    talkers[talkerId] = { ...newPeople, id: Number(id) };
+    // verifica se talkerId é < 0, porque o findIndex retornar menos 1 quando da erro.
+    if (talkerId < 0) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    await fs.writeFile(talkerPath, JSON.stringify(talkers));
+    return res.status(200).json({ ...newPeople, id: Number(id) });
+  });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
