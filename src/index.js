@@ -3,6 +3,13 @@ const fs = require('fs').promises;
 const path = require('path');
 const generateToken = require('./utils/generateToken');
 const { validatorEmail, validatorPassword } = require('./middlewares/validatorLogin');
+const validatorToken = require('./middlewares/validatorToken');
+const { validatorAge,
+  validatorName,
+  validatorWatchedAt,
+  validatorRate,
+  validatorTalk,
+} = require('./middlewares/validatorPerson');
 
 const app = express();
 app.use(express.json());
@@ -52,13 +59,38 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-app.post('/login', validatorEmail, validatorPassword, async (req, res) => {
+app.post('/login', validatorEmail, validatorPassword, (req, res) => {
   const { email, password } = req.body;
   if (email && password) {
     const token = generateToken();
     return res.status(200).json({ token });
   }
 });
+
+app.post('/talker',
+  validatorToken,
+  validatorName,
+  validatorAge,
+  validatorTalk,
+  validatorWatchedAt,
+  validatorRate,
+  async (req, res) => {
+    // talker é a informação da nova pessoa que vou cadastrar.
+    const talker = req.body;
+    const talkers = await readTalker();
+    // Pego o id na ultima posssição do array de objetos talkers.
+    const { id } = talkers[talkers.length - 1];
+    // crio o novo usuario em newTalker, e adiciono o id, com a chave id ex: se tem 5 pessoas no array, vai pegar 5 pessoas + 1, logo o novo id será 6 e assim sucessivamente.
+    const newTalker = {
+      ...talker,
+      id: id + 1,
+    };
+    // com JSON mudo o formato e mantenho o dados antigos e adiciono o novo em um unico array.
+    console.log('newTalker', newTalker);
+    const allTalkers = JSON.stringify([...talkers, newTalker]);
+    await fs.writeFile(talkerPath, allTalkers);
+    return res.status(201).json(newTalker);
+  });
 
 app.listen(PORT, () => {
   console.log('Online');
