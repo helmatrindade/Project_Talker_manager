@@ -33,6 +33,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+// Requisito 01
 app.get('/talker', async (_req, res) => {
   // const talkers = await readTalker();
   // if (!talkers) {
@@ -47,6 +48,7 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+// Requisito 02
 app.get('/talker/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -59,6 +61,7 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
+// Requisito 03 e Requisito 04
 app.post('/login', validatorEmail, validatorPassword, (req, res) => {
   const { email, password } = req.body;
   if (email && password) {
@@ -67,6 +70,7 @@ app.post('/login', validatorEmail, validatorPassword, (req, res) => {
   }
 });
 
+// Requisito 05
 app.post('/talker',
   validatorToken,
   validatorName,
@@ -92,6 +96,7 @@ app.post('/talker',
     return res.status(201).json(newTalker);
   });
 
+  // Requisito 06
 app.put('/talker/:id',
   validatorToken,
   validatorName,
