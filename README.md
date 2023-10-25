@@ -39,8 +39,22 @@ env $(cat .env) npm start
 env $(cat .env) npm run dev
 
 ```
-
 </details>
+
+<details>
+ <summary>🤗 Minhas Contribuições</summary><br>
+  
+ Neste projeto, minhas contribuições incluem:
+
+- Implementação dos endpoints da API:
+  1. `GET /talker` para retornar todas as pessoas palestrantes.
+  2. `GET /talker/:id` para retornar os palestrantes pelo id.
+  3. `POST /login` para autenticação de usuário.
+  4. `POST /talker` para adicionar um novo palestrante.
+  5. `PUT /talker/:id` para editar uma pessoa palestrante com base no id da rota, sem alterar o id registrado.
+  6. `DELETE /talker/:id` para deletar uma pessoa palestrante pelo id.
+ 
+ </details>
 
 ### 🙋‍♀️  Autor
 
